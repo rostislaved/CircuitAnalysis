@@ -26,7 +26,7 @@ function p = inputParse(varargin)
     addParameter(p,'Coefficients',defaultCoefficients,checkCoefficients)
     addParameter(p,'Order',defaultOrder,checkOrder)
 
-    parse(p,varargin{:})
+    parse(p,varargin{:});
 
     p = structfun(@lower, p.Results,'UniformOutput',false);
     

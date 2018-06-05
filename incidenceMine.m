@@ -1,21 +1,7 @@
 function B = incidenceMine(s, t, varargin)
-% s = s(:)';
-% t = t(:)';
-% vec = (1:max([s,t]))';
-% if nargin == 3
-%     if varargin{1}
-%         s1 = (vec == s);
-%         t1 = (vec == t);
-%     else
-%         s1 = sparse(s == vec);
-%         t1 = sparse(t == vec);
-%     end
-% else
-%     s1 = sparse(s == vec);
-%     t1 = sparse(t == vec);
-% end
-% B = t1 - s1;
-% end
+% Compute incidence matrix from s and t vectors
+% Buildin function is not applicable because of
+% inner sorting which is not possible to disable
 
 s = s(:)';
 t = t(:)';
@@ -23,7 +9,6 @@ vec = (1:max([s,t]))';
 
 s1 = sparse(s) == vec;
 t1 = sparse(t) == vec;
-
 
 B = t1 - s1;
 end
