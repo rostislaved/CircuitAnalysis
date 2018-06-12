@@ -115,13 +115,13 @@ if isequal(p.Coefficients, 'show') % Display g - matrix?
         Gs = sym('g',[1 size(An,2)]);
         Gs = diag(Gs);
         As = sym(An);
-        Gs = As*Gs*As';
+        Gss = As*Gs*As'
     else
         % Mesh
         r_d = sym('r',[1 size(C,2)]);
         r_d = diag(r_d);
         Cs = sym(C);
-        R = Cs*r_d*Cs'
+        Rs = Cs*r_d*Cs'
     end
 end
 % ========================================================================

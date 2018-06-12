@@ -12,7 +12,7 @@ R = sparse(R);
     Ik = rk\Ek;
 
     I = B'*Ik; % Vector of branch current
-    U = I.*R ; % Vector of branch voltage drop
+    U = I.*R;  % Vector of branch voltage drop
     
     % Doubtful. Do we need this?
     U = U - E;
