@@ -16,8 +16,8 @@ function p = inputParse(varargin)
     checkCoefficients = @(x) any(validatestring(x,validCoefficients));
     
     % Branches order
-    defaultOrder = '0';
-    validOrder = {'0', '1'};
+    defaultOrder = 'Branches';
+    validOrder = {'mst', 'Nodes', 'Branches'};
     checkOrder = @(x) any(validatestring(x,validOrder));
 
 

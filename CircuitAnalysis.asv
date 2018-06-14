@@ -17,10 +17,10 @@ function [Nodes, Branches] = CircuitAnalysis( s, t, E, Is, R, varargin)
 %       Value: 'on' (default) | 'off'
 %   6.3 Order of branches in Branches table (applies only for mesh method)
 %       Name: 'Order'
-%       Value: 'Branches' (Defalut) | 'Nodes' | 'mst' |
-%       'Branches' - order as was set in s and t vectors
-%       'Nodes' - ascending order of nodes (sorted by algorithm built in a 'graph' functuion)
+%       Value: 'mst' (Defalut) | 'Nodes' | 'Branches |
 %       'mst' - order as was sorted by convention for forming Mesh matrix
+%       'Branche' - order as was
+%       '1' - ascending order of nodes (sorted)
 %   6.4 Display matrix of coefficients in a symbolic way
 %       Name: 'Coefficients'
 %       Value: 'Hide' (Defalut) | 'Show'
@@ -139,17 +139,16 @@ Nodes = array2table(object1, 'VariableNames', {'Num';'Phi'});
 % form Branches table
 
 object2 = [branchesOrder(:), s(:), t(:), R(:), E(:), Is(:), U(:), I(:)];
-switch p.Order
-    case 'nodes'
-        EdgeTable = table([s,t], branchesOrder(:), 'VariableNames', {'EndNodes', 'Branch'});
-        g = digraph(EdgeTable);
-        [~, newOrder2] = ismember(g.Edges.Branch, branchesOrder(:));
-        object2 = object2(newOrder2,:);
-    case 'branches'
-        [~, newOrder2] = sort(object2(:,1));
-        object2 = object2(newOrder2,:);
-end
 
+if isequal(p.Order, 'nodes') % Branches
+    EdgeTable = table([s,t], branchesOrder(:), 'VariableNames', {'EndNodes', 'Branch'});
+    g = digraph(EdgeTable);
+    [~, newOrder2] = ismember(g.Edges.Branch, branchesOrder(:));
+    object2 = object2(newOrder2,:);
+elseif isequal(p.Order, 'branches') % Nodes
+    [~, newOrder2] = sort(object2(:,1));
+    object2 = object2(newOrder2,:);
+end
 
 Branches = array2table(object2, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'Is'; 'U'; 'I'});
 % ========================================================================

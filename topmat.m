@@ -1,6 +1,6 @@
 function [A, C, varargout] = topmat(s, t)
 % A - connections matrix
-% C - contours matrix
+% C - Mesh matrix
 % Q (varargout{1}) - cuts matrix
 
 [s, t, newOrder, g, T] = stSort(s, t);
