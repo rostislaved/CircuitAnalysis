@@ -1,4 +1,4 @@
-function [Nodes, Branches] = CircuitAnalysis( s, t, E, Is, R, varargin)
+function [Nodes, BranchesTable] = CircuitAnalysis( s, t, E, Is, R, varargin)
 % ========================================================================
 % Circuit analysis function
 % ========================================================================
@@ -61,8 +61,8 @@ E  = E(newOrder);
 Is = Is(newOrder);
 R  = R(newOrder);
 
-branchesOrder = 1:length(s);
-branchesOrder = branchesOrder(newOrder);
+branchesNumbers = (1:length(s))';
+branchesNumbers = branchesNumbers(newOrder);
 % ========================================================================
 
 %% Choose solving method =================================================
@@ -131,25 +131,27 @@ end
 % ========================================================================
 
 %% Form output ===========================================================
-% form Nodes table
+% Sort nodes
 num1 = 1:length(phi)+1;
 object1 = [ num1(:), [phi(:); 0] ];
+
+% Form nodes table
 Nodes = array2table(object1, 'VariableNames', {'Num';'Phi'});
 
-% form Branches table
-
-object2 = [branchesOrder(:), s(:), t(:), R(:), E(:), Is(:), U(:), I(:)];
+% Sort branches
+Branches =  [branchesNumbers(:), s(:), t(:), R(:), E(:), Is(:), U(:), I(:)];
 switch p.Order
-    case 'nodes'
-        EdgeTable = table([s,t], branchesOrder(:), 'VariableNames', {'EndNodes', 'Branch'});
-        g = digraph(EdgeTable);
-        [~, newOrder2] = ismember(g.Edges.Branch, branchesOrder(:));
-        object2 = object2(newOrder2,:);
     case 'branches'
-        [~, newOrder2] = sort(object2(:,1));
-        object2 = object2(newOrder2,:);
+        [~, finalOrder] = sort(branchesNumbers);
+    case 'nodes'
+        EdgeTable = table([s,t], branchesNumbers, 'VariableNames', {'EndNodes', 'Branch'});
+        tempG = digraph(EdgeTable);
+        [~, finalOrder] = ismember(tempG.Edges.Branch, branchesNumbers);
+    case 'mst'
+        finalOrder = branchesNumbers;
 end
+Branches = Branches(finalOrder,:);
 
-
-Branches = array2table(object2, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'Is'; 'U'; 'I'});
+% Form branches table
+BranchesTable = array2table(Branches, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'Is'; 'U'; 'I'});
 % ========================================================================

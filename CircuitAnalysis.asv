@@ -1,4 +1,4 @@
-function [Nodes, Branches] = CircuitAnalysis( s, t, E, Is, R, varargin)
+function [Nodes, BranchesTable] = CircuitAnalysis( s, t, E, Is, R, varargin)
 % ========================================================================
 % Circuit analysis function
 % ========================================================================
@@ -17,10 +17,10 @@ function [Nodes, Branches] = CircuitAnalysis( s, t, E, Is, R, varargin)
 %       Value: 'on' (default) | 'off'
 %   6.3 Order of branches in Branches table (applies only for mesh method)
 %       Name: 'Order'
-%       Value: 'mst' (Defalut) | 'Nodes' | 'Branches |
+%       Value: 'Branches' (Defalut) | 'Nodes' | 'mst' |
+%       'Branches' - order as was set in s and t vectors
+%       'Nodes' - ascending order of nodes (sorted by algorithm built in a 'graph' functuion)
 %       'mst' - order as was sorted by convention for forming Mesh matrix
-%       'Branche' - order as was
-%       '1' - ascending order of nodes (sorted)
 %   6.4 Display matrix of coefficients in a symbolic way
 %       Name: 'Coefficients'
 %       Value: 'Hide' (Defalut) | 'Show'
@@ -61,7 +61,7 @@ E  = E(newOrder);
 Is = Is(newOrder);
 R  = R(newOrder);
 
-branchesOrder = 1:length(s);
+branchesOrder = (1:length(s))';
 branchesOrder = branchesOrder(newOrder);
 % ========================================================================
 
@@ -136,19 +136,23 @@ num1 = 1:length(phi)+1;
 object1 = [ num1(:), [phi(:); 0] ];
 Nodes = array2table(object1, 'VariableNames', {'Num';'Phi'});
 
-% form Branches table
+% Sort branc
+Branches =  [branchesOrder(:), s(:), t(:), R(:), E(:), Is(:), U(:), I(:)];
 
-object2 = [branchesOrder(:), s(:), t(:), R(:), E(:), Is(:), U(:), I(:)];
-
-if isequal(p.Order, 'nodes') % Branches
-    EdgeTable = table([s,t], branchesOrder(:), 'VariableNames', {'EndNodes', 'Branch'});
-    g = digraph(EdgeTable);
-    [~, newOrder2] = ismember(g.Edges.Branch, branchesOrder(:));
-    object2 = object2(newOrder2,:);
-elseif isequal(p.Order, 'branches') % Nodes
-    [~, newOrder2] = sort(object2(:,1));
-    object2 = object2(newOrder2,:);
+switch p.Order
+    case 'branches'
+        [~, finalOrder] = sort(branchesOrder);
+    case 'nodes'
+        EdgeTable = table([s,t], branchesOrder, 'VariableNames', {'EndNodes', 'Branch'});
+        tempG = digraph(EdgeTable);
+        [~, finalOrder] = ismember(tempG.Edges.Branch, branchesOrder);
+    case 'mst'
+        finalOrder = branchesOrder;
 end
 
-Branches = array2table(object2, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'Is'; 'U'; 'I'});
+
+Branches = Branches(finalOrder,:);
+
+
+BranchesTable = array2table(Branches, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'Is'; 'U'; 'I'});
 % ========================================================================
