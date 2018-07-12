@@ -1,25 +1,26 @@
-function [I, U, phi, rk] = MA(E, Is, R, An, C)
+function [I, U, phi, rk] = MA(E, J, R, An, C)
 
 E = sparse(E);
-Is = sparse(Is);
+J = sparse(J);
 R = sparse(R);
 
-    B = C;   
-    r_d = diag(R);
-    rk = B*r_d*B';
-    E = E + R.*Is; % Transfrom current sourse in parralel branch to emf sourse in serial
-    Ek = B*E;
-    Ik = rk\Ek;
+    r_d = diag(R);   
+    
+    rk = C*r_d*C';  % Matrix of coefficients
+    Ek = C*(E - R.*J);   % Right part of the system (Voltages)
+    Ik = rk\Ek; % Solve system of linear equations
 
-    I = B'*Ik; % Vector of branch current
-    U = I.*R;  % Vector of branch voltage drop
+    I = (Ik'*C)' + J; % Vector of branch current
+
+    U = I.*R - E; % Vector of branch voltage drop
+    phi  = An'\U;
+
     
-    % Doubtful. Do we need this?
-    U = U - E;
-    phi = An'\U;
     
-    phi = full(phi);
-    I = full(I);
-    U = full(U);
+    
+    
+phi = full(phi);
+I = full(I);
+U = full(U);
     
 end

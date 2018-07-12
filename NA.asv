@@ -1,7 +1,7 @@
-function [I, U, phi, G] = NA(E, J, R, An)
+function [I, U, phi, G] = NA(E, Is, R, An)
 
 E = sparse(E);
-J = sparse(J);
+Is = sparse(Is);
 R = sparse(R);
 
 %     g  = sparse(1)./R;
@@ -20,12 +20,12 @@ R = sparse(R);
     g_d = diag(g);
     
     G = An*g_d*An'; % Matrix of coefficients
-    J = An*(J - E.*g);  % Right part of the system (Currents)
+    J = An*(Is - E.*g);  % Right part of the system (Currents)
     phi = G\J;   % Potentials from 1st to  n-1 nodes
     
     U = (phi'*An)'; % Branch voltage drop
 
-    I = (U + E).*g;    % Currents
+    I = (U+E).*g;    % Currents
     
     phi = full(phi);
     I = full(I);

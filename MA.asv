@@ -1,0 +1,44 @@
+function [I, U, phi, rk] = MA(E, J, R, An, C)
+
+E = sparse(E);
+J = sparse(J);
+R = sparse(R);
+
+
+
+
+%    
+%     r_d = diag(R);
+%     rk = C*r_d*C';
+%     E = E - R.*J; % Transfrom current sourse in parralel branch to emf sourse in serial
+%     Ek = C*E;
+%     Ik = rk\Ek;
+% 
+%     I = (Ik'*C)'; % Vector of branch current
+% 
+%     U = I.*R - E;% Vector of branch voltage drop
+%     phi = An'\U;
+%     
+
+    r_d = diag(R);
+    
+    
+    rk = C*r_d*C';
+    Ek = C*(E - R.*J);
+    Ik = rk\Ek;
+
+    I = (Ik'*C)' + J; % Vector of branch current
+
+    U = I.*R - E;% Vector of branch voltage drop
+    phi  = An'\U
+    phi2 = An\U'
+    
+    
+    
+    
+    
+phi = full(phi);
+I = full(I);
+U = full(U);
+    
+end

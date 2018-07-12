@@ -15,10 +15,10 @@ function [A, C, varargout] = topmat(s, t)
 B = incidenceMine(s,t);
 
 A = inc2nc(B);
-sz = min(size(A));
+% sz = min(size(A));
+sz = size(A, 1);
 A1 = A(:,1:sz);
 A2 = A(:,sz+1:end);
-
 Q2 = inv(A1)*A2;
 
 Q = [speye(sz) Q2];
