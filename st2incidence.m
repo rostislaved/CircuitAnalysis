@@ -1,4 +1,4 @@
-function B = st2incidence(s, t, varargin)
+function B = incidenceMine(s, t, varargin)
 % Compute incidence matrix from s and t vectors
 % Buildin function is not applicable because of
 % inner sorting which is not possible to disable

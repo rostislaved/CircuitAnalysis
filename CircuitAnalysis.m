@@ -153,5 +153,5 @@ end
 Branches = Branches(finalOrder,:);
 
 % Form branches table
-BranchesTable = array2table(Branches, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'Is'; 'U'; 'I'});
+BranchesTable = array2table(Branches, 'VariableNames', {'Branch';'s';'t';'R';'E'; 'J'; 'U'; 'I'});
 % ========================================================================
