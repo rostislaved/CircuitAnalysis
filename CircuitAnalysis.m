@@ -136,7 +136,7 @@ num1 = 1:length(phi)+1;
 object1 = [ num1(:), [phi(:); 0] ];
 
 % Form nodes table
-Nodes = array2table(object1, 'VariableNames', {'Num';'Phi'});
+Nodes = array2table(object1, 'VariableNames', {'Num';'Potential'});
 
 % Sort branches
 Branches =  [branchesNumbers(:), s(:), t(:), R(:), E(:), Is(:), U(:), I(:)];
