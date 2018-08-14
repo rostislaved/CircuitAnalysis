@@ -1,7 +1,7 @@
 function [A, C, varargout] = topmat(s, t)
 % A - connections matrix
 % C - Mesh matrix
-% Q (varargout{1}) - cuts matrix
+% Q (varargout{1}) - Sections matrix
 
 [s, t, newOrder, g, T] = stSort(s, t);
 
@@ -12,7 +12,7 @@ function [A, C, varargout] = topmat(s, t)
 % highlight(p,T);
 
 
-B = incidenceMine(s,t);
+B = st2incidence(s,t);
 
 A = inc2nc(B);
 % sz = min(size(A));

@@ -14,10 +14,6 @@ R = sparse(R);
 
     U = I.*R - E; % Vector of branch voltage drop
     phi  = An'\U;
-
-    
-    
-    
     
 phi = full(phi);
 I = full(I);
