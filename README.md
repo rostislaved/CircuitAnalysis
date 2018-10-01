@@ -15,3 +15,5 @@ Main file - Main.m.
 % 4. Is - Vector of branch current (in parralel)
 
 % 5. R  - Vector of branch resistance
+
+# Example
